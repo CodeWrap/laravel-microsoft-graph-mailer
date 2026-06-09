@@ -1,0 +1,34 @@
+{
+    "name": "codewrap/laravel-microsoft-graph-mailer",
+    "description": "Laravel mail driver for Microsoft Graph API.",
+    "keywords": ["laravel", "mail", "microsoft", "graph", "exchange", "365"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Codewrap",
+            "email": "max@codewrap.de"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/cache": "^11.0|^12.0|^13.0",
+        "illuminate/http": "^11.0|^12.0|^13.0",
+        "illuminate/mail": "^11.0|^12.0|^13.0",
+        "illuminate/support": "^11.0|^12.0|^13.0",
+        "spatie/laravel-package-tools": "^1.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Codewrap\\MicrosoftGraphMailer\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Codewrap\\MicrosoftGraphMailer\\MicrosoftGraphMailerServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
