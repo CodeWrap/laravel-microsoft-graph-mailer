@@ -136,17 +136,25 @@ class MicrosoftGraphTransport extends AbstractTransport implements Stringable
         $ttlKey = sprintf('msgraph-mailer-ttl:%s:%s', $tenant, $clientId);
 
         return Cache::remember($cacheKey, $this->getTokenCacheTtl($ttlKey), function () use ($tenant, $ttlKey) {
-            $response = Http::asForm()
-                ->timeout(10)
-                ->post(
-                    sprintf('%s/%s/oauth2/v2.0/token', $this->getAuthUrl(), $tenant),
-                    [
-                        'grant_type' => 'client_credentials',
-                        'client_id' => $this->config['client'],
-                        'client_secret' => $this->config['secret'],
-                        'scope' => 'https://graph.microsoft.com/.default',
-                    ],
+            try {
+                $response = Http::asForm()
+                    ->timeout(10)
+                    ->post(
+                        sprintf('%s/%s/oauth2/v2.0/token', $this->getAuthUrl(), $tenant),
+                        [
+                            'grant_type' => 'client_credentials',
+                            'client_id' => $this->config['client'],
+                            'client_secret' => $this->config['secret'],
+                            'scope' => 'https://graph.microsoft.com/.default',
+                        ],
+                    );
+            } catch (\Exception $e) {
+                throw new TransportException(
+                    sprintf('Failed to obtain Microsoft Graph access token. Reason: %s.', $e->getMessage()),
+                    is_int($e->getCode()) ? $e->getCode() : 0,
+                    $e,
                 );
+            }
 
             if ($response->failed()) {
                 throw new TransportException(
